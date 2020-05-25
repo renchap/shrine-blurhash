@@ -2,10 +2,10 @@ AllCops:
   TargetRubyVersion: 2.5
 StringLiterals:
   Enabled: false
-Style/Documentation:
-  Enabled: false
 Layout/LineLength:
   Max: 120
+Style/Documentation:
+  Enabled: false
 Metrics/AbcSize:
   Enabled: false
 Metrics/BlockLength:
@@ -20,9 +20,17 @@ Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: comma
-Style/HashEachMethods:
+Layout/EmptyLinesAroundAttributeAccessor:
   Enabled: true
-Style/HashTransformKeys:
+Layout/SpaceAroundMethodCallOperator:
   Enabled: true
-Style/HashTransformValues:
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+Lint/RaiseException:
+  Enabled: true
+Lint/StructNewOverride:
+  Enabled: true
+Style/ExponentialNotation:
+  Enabled: true
+Style/SlicingWithRange:
   Enabled: true
