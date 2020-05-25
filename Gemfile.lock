@@ -1,0 +1,31 @@
+PATH
+  remote: .
+  specs:
+    shrine-blurhash (0.0.1)
+      shrine (~> 3.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.7.0)
+      public_suffix (>= 2.0.2, < 5.0)
+    content_disposition (1.0.0)
+    down (5.1.1)
+      addressable (~> 2.5)
+    minitest (5.14.1)
+    public_suffix (4.0.5)
+    rake (13.0.1)
+    shrine (3.2.1)
+      content_disposition (~> 1.0)
+      down (~> 5.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  minitest
+  rake
+  shrine-blurhash!
+
+BUNDLED WITH
+   2.1.4
