@@ -1,0 +1,22 @@
+name: Run tests
+on: [push, pull_request]
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu]
+        ruby: [2.5, 2.6, 2.7, head]
+    runs-on: ${{ matrix.os }}-latest
+    continue-on-error: ${{ endsWith(matrix.ruby, 'head') }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - name: Install system deps
+      run: |
+        sudo apt-get -y update
+        sudo apt-get -yqq --no-install-recommends install libvips-dev
+    - run: bundle install
+    - run: bundle exec rake
