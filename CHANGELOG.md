@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.1 - 2020-05-27
+
 ### Added
 
 - First version!
