@@ -13,7 +13,12 @@ class Shrine
       end
 
       def self.configure(uploader, log_subscriber: LOG_SUBSCRIBER, **opts)
-        uploader.opts[:blurhash] ||= { analyzer: :ruby_vips, on_error: :warn }
+        uploader.opts[:blurhash] ||= {
+          extractor: :ruby_vips,
+          on_error: :warn,
+          resize_to: 100,
+          components: [4, 3],
+        }
         uploader.opts[:blurhash].merge!(opts)
 
         # resolve error strategy
@@ -33,11 +38,15 @@ class Shrine
         def compute_blurhash(io)
           extractor = opts[:blurhash][:extractor]
           extractor = pixels_extractor(extractor) if extractor.is_a?(Symbol)
-          args = [io, pixels_extractors].take(extractor.arity.abs)
+
+          resize_to = opts[:blurhash][:resize_to]
+          args = [io, resize_to, pixels_extractors].take(extractor.arity.abs)
 
           blurhash = instrument_blurhash(io) do
             pixels = extractor.call(*args)
-            ::Blurhash.encode(pixels[:width], pixels[:height], pixels[:pixels])
+
+            components = opts[:blurhash][:components]
+            ::Blurhash.encode(pixels[:width], pixels[:height], pixels[:pixels], x_comp: components[0], y_comp: components[1])
           end
 
           io.rewind
@@ -90,27 +99,29 @@ class Shrine
 
         def initialize(tool, on_error: method(:fail))
           unless SUPPORTED_EXTRACTORS.include?(tool)
-            raise Error, "unknown dimensions analyzer #{tool.inspect}, supported analyzers are: #{SUPPORTED_EXTRACTORS.join(',')}"
+            raise Error, "unknown pixel extractor #{tool.inspect}, supported extractors are: #{SUPPORTED_EXTRACTORS.join(',')}"
           end
 
           @tool     = tool
           @on_error = on_error
         end
 
-        def call(io)
-          dimensions = send(:"extract_with_#{@tool}", io)
+        def call(io, resize_to)
+          dimensions = send(:"extract_with_#{@tool}", io, resize_to)
           io.rewind
           dimensions
         end
 
         private
 
-        def extract_with_ruby_vips(io)
+        def extract_with_ruby_vips(io, resize_to)
           require "vips"
 
           begin
             Shrine.with_file(io) do |file|
-              image = Vips::Image.new_from_file(file.path)
+              image = Vips::Image.new_from_file(file.path, access: :sequential)
+              image = image.resize(resize_to.fdiv(image.width), vscale: resize_to.fdiv(image.height)) if resize_to
+
               {
                 width: image.width,
                 height: image.height,
