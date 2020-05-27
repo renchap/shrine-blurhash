@@ -6,9 +6,13 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu]
-        ruby: [2.5, 2.6, 2.7, head]
+        ruby:
+          - 2.5
+          - 2.6
+          - 2.7
+          # - head # disabled as ruby-vips produces warnings
     runs-on: ${{ matrix.os }}-latest
-    continue-on-error: ${{ endsWith(matrix.ruby, 'head') }}
+    # continue-on-error: ${{ endsWith(matrix.ruby, 'head') }}
     steps:
     - uses: actions/checkout@v2
     - uses: ruby/setup-ruby@v1
