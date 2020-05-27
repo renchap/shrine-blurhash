@@ -65,4 +65,16 @@ describe Shrine::Plugins::Blurhash do
       assert_nil uploaded_file.blurhash
     end
   end
+
+  describe "auto_extraction: false" do
+    it "does not add metadata" do
+      @shrine.plugin :blurhash, auto_extraction: false
+      uploaded_file = @uploader.upload(image)
+      assert_nil uploaded_file.metadata["blurhash"]
+    end
+
+    it "provides method to compute blurhash from files" do
+      assert_equal "LLHLk~ja2xkBpdoKaeR*%fkCMxnj", @shrine.compute_blurhash(image)
+    end
+  end
 end

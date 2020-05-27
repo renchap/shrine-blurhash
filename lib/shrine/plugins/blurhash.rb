@@ -16,6 +16,7 @@ class Shrine
         uploader.opts[:blurhash] ||= {
           extractor: :ruby_vips,
           on_error: :warn,
+          auto_extraction: true,
           resize_to: 100,
           components: [4, 3],
         }
@@ -82,8 +83,9 @@ class Shrine
 
       module InstanceMethods
         def extract_metadata(io, **options)
-          blurhash = self.class.compute_blurhash(io)
+          return super unless self.class.opts[:blurhash][:auto_extraction]
 
+          blurhash = self.class.compute_blurhash(io)
           super.merge!("blurhash" => blurhash)
         end
       end
