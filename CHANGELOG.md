@@ -9,3 +9,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - First version!
+- Multiple pixel extractors support, even if only VIPS is implemented right now
+- Allows to resize the image before computing blurhash (to 100 pixels by default) for a faster computation
+- Supports custom blurhash components parameter
