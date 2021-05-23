@@ -46,8 +46,8 @@ class Shrine
           blurhash = instrument_blurhash(io) do
             pixels = extractor.call(*args)
 
-            components = opts[:blurhash][:components]
-            ::Blurhash.encode(pixels[:width], pixels[:height], pixels[:pixels], x_comp: components[0], y_comp: components[1])
+            x_comp, y_comp = components_for(pixels[:width], pixels[:height])
+            ::Blurhash.encode(pixels[:width], pixels[:height], pixels[:pixels], x_comp: x_comp, y_comp: y_comp)
           end
 
           io.rewind
@@ -72,6 +72,13 @@ class Shrine
         end
 
         private
+
+        def components_for(width, height)
+          if opts[:blurhash][:components].respond_to?(:call)
+            opts[:blurhash][:components].call(width, height)
+          else opts[:blurhash][:components]
+          end
+        end
 
         # Sends a `blurhash.shrine` event for instrumentation plugin.
         def instrument_blurhash(io, &block)

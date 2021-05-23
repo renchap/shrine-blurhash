@@ -31,6 +31,11 @@ describe Shrine::Plugins::Blurhash do
     assert_equal "AEHLk~jbpyoK", @shrine.compute_blurhash(image)
   end
 
+  it "allows passing a proc to calculate components" do
+    @shrine.plugin :blurhash, components: ->(_w, _h) { [2, 2] }
+    assert_equal "AEHLk~jbpyoK", @shrine.compute_blurhash(image)
+  end
+
   it "allows to customize resize dimensions" do
     @shrine.plugin :blurhash, resize_to: 200
     assert_equal "LLHV6naf2xk9lAoKaeR*%fkBMxn*", @shrine.compute_blurhash(image)
