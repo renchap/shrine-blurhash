@@ -44,7 +44,7 @@ end
 
 ### ```components```
 
-Type: `[components_x, components_y]`
+Type: `[components_x, components_y]` or a `Proc`
 Default: `[4, 3]`
 
 ```ruby
@@ -52,6 +52,12 @@ plugin :blurhash, components: [2, 2]
 ```
 
 This allows you to customize the number of components on each axis for the Blurhash algorithm. The visual result will look like a grid of `X * Y` blurred colors.
+
+You can also pass a proc which receive the width and height and calculate the components on-the-fly:
+
+```ruby
+plugin :blurhash, components: ->(width, height) { [width / 600, height / 600] }
+```
 
 ### `resize_to`
 
