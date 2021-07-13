@@ -8,7 +8,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.7.0)
+    addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     blurhash (0.1.4)
       ffi (~> 1.10.0)
@@ -17,7 +17,7 @@ GEM
       addressable (~> 2.5)
     ffi (1.10.0)
     minitest (5.14.1)
-    public_suffix (4.0.5)
+    public_suffix (4.0.6)
     rake (13.0.1)
     ruby-vips (2.0.17)
       ffi (~> 1.9)
