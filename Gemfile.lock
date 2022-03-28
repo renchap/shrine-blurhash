@@ -8,20 +8,20 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.7.0)
+    addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
-    blurhash (0.1.4)
-      ffi (~> 1.10.0)
+    blurhash (0.1.6)
+      ffi (~> 1.14)
     content_disposition (1.0.0)
-    down (5.1.1)
-      addressable (~> 2.5)
-    ffi (1.10.0)
-    minitest (5.14.1)
-    public_suffix (4.0.5)
-    rake (13.0.1)
-    ruby-vips (2.0.17)
-      ffi (~> 1.9)
-    shrine (3.2.1)
+    down (5.3.1)
+      addressable (~> 2.8)
+    ffi (1.15.5)
+    minitest (5.15.0)
+    public_suffix (4.0.6)
+    rake (13.0.6)
+    ruby-vips (2.1.4)
+      ffi (~> 1.12)
+    shrine (3.4.0)
       content_disposition (~> 1.0)
       down (~> 5.1)
 
@@ -35,4 +35,4 @@ DEPENDENCIES
   shrine-blurhash!
 
 BUNDLED WITH
-   2.1.4
+   2.3.7
