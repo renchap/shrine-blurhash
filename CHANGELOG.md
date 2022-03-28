@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.1.0 - 2021-03-28
+
+### Added
+
+- Allow passing a proc to calculate components (#9 by @NuckChorris)
+- Run tests on Ruby 3.0 and 3.1 in CI
+
+###
+
 ## 0.0.1 - 2020-05-27
 
 ### Added
