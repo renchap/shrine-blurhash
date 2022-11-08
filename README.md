@@ -78,7 +78,7 @@ You can either specify the target size or `nil` to disable image resizing comple
 Type: `symbol` or `lambda`
 
 ```ruby
-plugin :blurhash, extractor: :ruby-vips
+plugin :blurhash, extractor: :ruby_vips
 ```
 
 Supported extractors:
