@@ -130,6 +130,7 @@ class Shrine
             Shrine.with_file(io) do |file|
               image = Vips::Image.new_from_file(file.path, access: :sequential)
               image = image.resize(resize_to.fdiv(image.width), vscale: resize_to.fdiv(image.height)) if resize_to
+              image = image.flatten if image.has_alpha?
 
               {
                 width: image.width,
