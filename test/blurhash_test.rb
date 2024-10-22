@@ -23,17 +23,17 @@ describe Shrine::Plugins::Blurhash do
   end
 
   it "computes the correct blurhash with default options" do
-    assert_equal "LLHLk~ja2xkBpdoKaeR*%fkCMxnj", @shrine.compute_blurhash(image)
+    assert_equal "LLHLk~jZ2xkBpdoKaeR*%fkCMxnj", @shrine.compute_blurhash(image)
   end
 
   it "allows to customize components" do
     @shrine.plugin :blurhash, components: [2, 2]
-    assert_equal "AEHLk~jbpyoK", @shrine.compute_blurhash(image)
+    assert_equal "AEHLk~jZpyoK", @shrine.compute_blurhash(image)
   end
 
   it "allows passing a proc to calculate components" do
     @shrine.plugin :blurhash, components: ->(_w, _h) { [2, 2] }
-    assert_equal "AEHLk~jbpyoK", @shrine.compute_blurhash(image)
+    assert_equal "AEHLk~jZpyoK", @shrine.compute_blurhash(image)
   end
 
   it "allows to customize resize dimensions" do
@@ -48,14 +48,14 @@ describe Shrine::Plugins::Blurhash do
 
   it "automatically computes the blurhash on upload" do
     uploaded_file = @uploader.upload(image)
-    assert_equal "LLHLk~ja2xkBpdoKaeR*%fkCMxnj", uploaded_file.metadata["blurhash"]
+    assert_equal "LLHLk~jZ2xkBpdoKaeR*%fkCMxnj", uploaded_file.metadata["blurhash"]
   end
 
   describe "blurhash method" do
     it "is added to UploadedFile" do
       uploaded_file = @uploader.upload(image)
-      assert_equal "LLHLk~ja2xkBpdoKaeR*%fkCMxnj", uploaded_file.metadata["blurhash"]
-      assert_equal "LLHLk~ja2xkBpdoKaeR*%fkCMxnj", uploaded_file.blurhash
+      assert_equal "LLHLk~jZ2xkBpdoKaeR*%fkCMxnj", uploaded_file.metadata["blurhash"]
+      assert_equal "LLHLk~jZ2xkBpdoKaeR*%fkCMxnj", uploaded_file.blurhash
     end
 
     it "allows a nil blurhash metadata" do
@@ -79,7 +79,7 @@ describe Shrine::Plugins::Blurhash do
     end
 
     it "provides method to compute blurhash from files" do
-      assert_equal "LLHLk~ja2xkBpdoKaeR*%fkCMxnj", @shrine.compute_blurhash(image)
+      assert_equal "LLHLk~jZ2xkBpdoKaeR*%fkCMxnj", @shrine.compute_blurhash(image)
     end
   end
 end
