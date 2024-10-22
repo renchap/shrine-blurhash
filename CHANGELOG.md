@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.2.0 - 2024-10-22
+
+### Breaking changes
+
+- Minimum supported Ruby version is 3.1.0
+
+### Fixed
+
+- Remove alpha channel from transparent images (#13 by @bb)
+
 ## 0.1.0 - 2021-03-28
 
 ### Added
