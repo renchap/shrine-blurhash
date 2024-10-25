@@ -132,6 +132,21 @@ class Shrine
               image = image.resize(resize_to.fdiv(image.width), vscale: resize_to.fdiv(image.height)) if resize_to
               image = image.flatten if image.has_alpha?
 
+              # Blurhash requires exactly 3 bands
+              case image.bands
+              when 1
+                # Duplicate the only band into 2 new bands
+                image = image.bandjoin(Array.new(3 - image.bands, image))
+              when 2
+                # Duplicate the first band into a third band
+                image = image.bandjoin(image.extract_band(0))
+              when 3
+                # Do nothing, band count is already correct
+              else
+                # Only keep the first 3 bands
+                image = image.extract_band(0, n: 3)
+              end
+
               {
                 width: image.width,
                 height: image.height,
