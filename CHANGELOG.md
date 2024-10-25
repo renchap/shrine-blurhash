@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.2.1 - 2024-10-25
+
+### Fixed
+
+- Fixed processing of images with not exactly 3 bands (#14 by @renchap)
+
 ## 0.2.0 - 2024-10-22
 
 ### Breaking changes
