@@ -10,14 +10,24 @@ GEM
   specs:
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    benchmark (0.4.0)
     blurhash (0.1.8)
     content_disposition (1.0.0)
     down (5.4.2)
       addressable (~> 2.8)
     ffi (1.15.5)
+    logger (1.6.5)
+    mini_magick (5.1.2)
+      benchmark
+      logger
     minitest (5.15.0)
+    observer (0.1.2)
+    pkg-config (1.5.9)
     public_suffix (6.0.1)
     rake (13.0.6)
+    rmagick (6.1.1)
+      observer (~> 0.1)
+      pkg-config (~> 1.4)
     ruby-vips (2.1.4)
       ffi (~> 1.12)
     shrine (3.6.0)
@@ -28,8 +38,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  mini_magick
   minitest
   rake
+  rmagick
   ruby-vips
   shrine-blurhash!
 

@@ -21,4 +21,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "minitest"
   gem.add_development_dependency "rake"
   gem.add_development_dependency "ruby-vips"
+  gem.add_development_dependency "rmagick"
+  gem.add_development_dependency "mini_magick"
 end
