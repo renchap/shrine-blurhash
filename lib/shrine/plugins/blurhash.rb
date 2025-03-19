@@ -90,10 +90,25 @@ class Shrine
 
       module InstanceMethods
         def extract_metadata(io, **options)
-          return super unless self.class.opts[:blurhash][:auto_extraction]
+          metadata = super
 
-          blurhash = self.class.compute_blurhash(io)
-          super.merge!("blurhash" => blurhash)
+          if self.class.opts[:blurhash][:auto_extraction] && image?(io, metadata)
+            begin
+              blurhash = self.class.compute_blurhash(io)
+              metadata.merge!("blurhash" => blurhash)
+            rescue => e
+              self.class.opts[:blurhash][:on_error].call(e)
+            end
+          end
+      
+          metadata
+        end
+
+        private
+
+        def image?(io, metadata)
+          mime_type = metadata["mime_type"]
+          mime_type && mime_type.start_with?("image/")
         end
       end
 
