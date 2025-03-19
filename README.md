@@ -7,6 +7,8 @@ Provides [Blurhash] computing for [Shrine].
 Main features:
 - Multiple pixel extractors support. Current implementations:
   - `ruby-vips`
+  - `mini_magic`
+  - `rmagick`
 - Resize the image before computing blurhash (to 100 pixels by default) for a faster computation
 - Supports custom blurhash components parameter
 
@@ -86,6 +88,9 @@ Supported extractors:
 | Name           | Description                                                                                                                                   |
 | :-----------   | :-----------                                                                                                                                  |
 | `:ruby_vips`   | Uses the [ruby-vips] gem to extract pixels from File objects. If non-file IO object is given it will be temporarily downloaded to disk.   |
+| `:mini_magick`   | Uses the [mini_magick] gem to extract pixels from File objects. If non-file IO object is given it will be temporarily downloaded to disk.   |
+| `:rmagick`   | Uses the [rmagick] gem to extract pixels from File objects. If non-file IO object is given it will be temporarily downloaded to disk.   |
+
 
 You can also create your own custom pixel extractor, where you can reuse
 any of the built-in analyzers. The analyzer is a lambda that accepts an IO

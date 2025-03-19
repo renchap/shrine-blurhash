@@ -90,10 +90,25 @@ class Shrine
 
       module InstanceMethods
         def extract_metadata(io, **options)
-          return super unless self.class.opts[:blurhash][:auto_extraction]
+          metadata = super
 
-          blurhash = self.class.compute_blurhash(io)
-          super.merge!("blurhash" => blurhash)
+          if self.class.opts[:blurhash][:auto_extraction] && image?(io, metadata)
+            begin
+              blurhash = self.class.compute_blurhash(io)
+              metadata.merge!("blurhash" => blurhash)
+            rescue => e
+              self.class.opts[:blurhash][:on_error].call(e)
+            end
+          end
+      
+          metadata
+        end
+
+        private
+
+        def image?(io, metadata)
+          mime_type = metadata["mime_type"]
+          mime_type && mime_type.start_with?("image/")
         end
       end
 
@@ -104,7 +119,7 @@ class Shrine
       end
 
       class PixelsExtractor
-        SUPPORTED_EXTRACTORS = [:ruby_vips].freeze
+        SUPPORTED_EXTRACTORS = %I[ruby_vips rmagick mini_magick].freeze
 
         def initialize(tool, on_error: method(:fail))
           unless SUPPORTED_EXTRACTORS.include?(tool)
@@ -158,6 +173,44 @@ class Shrine
           end
         end
 
+        def extract_with_mini_magick(io, resize_to)
+          require "mini_magick"
+
+          begin
+            Shrine.with_file(io) do |file|
+              image = MiniMagick::Image.open(file.path)
+              image = image.resize("#{resize_to}x#{resize_to}") if resize_to
+
+              {
+                width: image.width,
+                height: image.height,
+                pixels: image.get_pixels.flatten,
+              }
+            end
+          rescue Vips::Error => e
+            on_error(e)
+          end
+        end
+
+        def extract_with_rmagick(io, resize_to)
+          require "rmagick"
+
+          begin
+            Shrine.with_file(io) do |file|
+              image = Magick::ImageList.new(file.path)
+              image.resize_to_fit!(resize_to, resize_to) if resize_to
+
+              {
+                width: image.columns,
+                height: image.rows,
+                pixels: image.export_pixels,
+              }
+            end
+          rescue Vips::Error => e
+            on_error(e)
+          end
+        end
+
         def on_error(error)
           @on_error.call(error)
           nil
@@ -168,3 +221,4 @@ class Shrine
     register_plugin(:blurhash, Blurhash)
   end
 end
+
