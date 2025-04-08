@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |gem|
   gem.name          = "shrine-blurhash"
-  gem.version       = "0.2.2"
+  gem.version       = "0.2.3"
 
   gem.required_ruby_version = ">= 3.1"
 

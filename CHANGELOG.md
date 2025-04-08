@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.2.3 - 2025-04-08
+
+### Fixed
+
+- When an exception occured during the pixel extraction, `on_error` was called but then the blurhash computation always failed and throwed. Now it will return `nil`.
+
 ## 0.2.2 - 2024-10-25
 
 ### Fixed
