@@ -53,6 +53,9 @@ class Shrine
           io.rewind
 
           blurhash
+        rescue StandardError => e
+          opts[:blurhash][:on_error].call(e)
+          nil
         end
 
         # Returns a hash of built-in pixels extractors, where keys are
@@ -66,9 +69,7 @@ class Shrine
 
         # Returns callable pixels extractor object.
         def pixels_extractor(name)
-          on_error = opts[:blurhash][:on_error]
-
-          PixelsExtractor.new(name, on_error: on_error).method(:call)
+          PixelsExtractor.new(name).method(:call)
         end
 
         private
@@ -106,13 +107,12 @@ class Shrine
       class PixelsExtractor
         SUPPORTED_EXTRACTORS = [:ruby_vips].freeze
 
-        def initialize(tool, on_error: method(:fail))
+        def initialize(tool)
           unless SUPPORTED_EXTRACTORS.include?(tool)
             raise Error, "unknown pixel extractor #{tool.inspect}, supported extractors are: #{SUPPORTED_EXTRACTORS.join(',')}"
           end
 
           @tool     = tool
-          @on_error = on_error
         end
 
         def call(io, resize_to)
@@ -126,41 +126,31 @@ class Shrine
         def extract_with_ruby_vips(io, resize_to)
           require "vips"
 
-          begin
-            Shrine.with_file(io) do |file|
-              image = Vips::Image.new_from_file(file.path, access: :sequential).colourspace(:srgb)
-              image = image.resize(resize_to.fdiv(image.width), vscale: resize_to.fdiv(image.height)) if resize_to
-              image = image.flatten if image.has_alpha?
-
-              # Blurhash requires exactly 3 bands
-              case image.bands
-              when 1
-                # Duplicate the only band into 2 new bands
-                image = image.bandjoin(Array.new(3 - image.bands, image))
-              when 2
-                # Duplicate the first band into a third band
-                image = image.bandjoin(image.extract_band(0))
-              when 3
-                # Do nothing, band count is already correct
-              else
-                # Only keep the first 3 bands
-                image = image.extract_band(0, n: 3)
-              end
-
-              {
-                width: image.width,
-                height: image.height,
-                pixels: image.to_a.flatten,
-              }
+          Shrine.with_file(io) do |file|
+            image = Vips::Image.new_from_file(file.path, access: :sequential).colourspace(:srgb)
+            image = image.resize(resize_to.fdiv(image.width), vscale: resize_to.fdiv(image.height)) if resize_to
+            image = image.flatten if image.has_alpha?
+            # Blurhash requires exactly 3 bands
+            case image.bands
+            when 1
+              # Duplicate the only band into 2 new bands
+              image = image.bandjoin(Array.new(3 - image.bands, image))
+            when 2
+              # Duplicate the first band into a third band
+              image = image.bandjoin(image.extract_band(0))
+            when 3
+              # Do nothing, band count is already correct
+            else
+              # Only keep the first 3 bands
+              image = image.extract_band(0, n: 3)
             end
-          rescue Vips::Error => e
-            on_error(e)
-          end
-        end
 
-        def on_error(error)
-          @on_error.call(error)
-          nil
+            {
+              width: image.width,
+              height: image.height,
+              pixels: image.to_a.flatten,
+            }
+          end
         end
       end
     end
